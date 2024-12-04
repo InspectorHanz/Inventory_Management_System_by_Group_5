@@ -1,0 +1,83 @@
+//creating of database for inventory and order
+CREATE DATABASE InventoryDB;
+
+USE InventoryDB;
+
+-- Create Products Table
+CREATE TABLE products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL
+);
+
+-- Create Stock Movement Table
+CREATE TABLE stock_movement (
+    movement_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    movement_type VARCHAR(50) NOT NULL,
+    quantity INT NOT NULL,
+    movement_date DATETIME NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+CREATE TABLE receipts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    total_cost DOUBLE,
+    payment_method VARCHAR(20),
+    amount_paid DOUBLE,
+    changes DOUBLE,  -- Change field name to 'changes'
+    receipt_date DATETIME
+);
+
+-- Create Receipt Items Table (linking products to receipts)
+CREATE TABLE receipt_items (
+    receipt_id INT,
+    product_id INT,  -- Foreign key for the existing products table
+    quantity INT,
+    price DOUBLE,
+    FOREIGN KEY (receipt_id) REFERENCES receipts(id)
+);
+
+//creating od database for login and signup
+CREATE DATABASE login_system;
+
+USE login_system;
+
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Insert a sample user (password is stored as plain text here, but in production, hash passwords)
+INSERT INTO users (username, password) VALUES ('admin', 'password123');
+
+CREATE DATABASE shopping_system;
+USE shopping_system;
+
+CREATE TABLE products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    price DECIMAL(10, 2) NOT NULL,
+    quantity INT NOT NULL
+);
+CREATE TABLE receipts (
+    receipt_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL,
+    total_cost DECIMAL(10, 2) NOT NULL,
+    purchase_date DATETIME NOT NULL, -- Correct column for storing the purchase date
+    UNIQUE (receipt_id)
+);
+
+CREATE TABLE receipt_items (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    receipt_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (receipt_id) REFERENCES receipts(receipt_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+
